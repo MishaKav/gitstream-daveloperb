@@ -27,6 +27,7 @@ manifest:
 triggers:
   on:
     - commit
+    - pr_created
   exclude:
     branch:
       - patch
