@@ -24,11 +24,12 @@ manifest:
 # | Automations
 # +----------------------------------------------------------------------------+
 
-triggers: {
+triggers:
   on:
     - commit
   exclude:
-    - branch: 'main'
+    branch:
+      - patch
 
 automations:
   # Apply color coded labels to PRs based on the estimated time to review.
