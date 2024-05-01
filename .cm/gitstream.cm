@@ -38,14 +38,14 @@ automations:
 
   # Flag PRs that are missing a Jira ticket reference in the title or description.
   # https://docs.gitstream.cm/integrations/jira/
-  label_missing_jira_info:
-    if:
-      - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
-    run:
-      - action: add-label@v1
-        args:
-          label: "missing-jira"
-          color: {{ colors.red }}
+  # label_missing_jira_info:
+  #   if:
+  #     - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
+  #   run:
+  #     - action: add-label@v1
+  #       args:
+  #         label: "missing-jira"
+  #         color: {{ colors.red }}
 
   # Flag PRs that have unresolved comment threads.
   # https://docs.gitstream.cm/automations/standard/label-management/label-unresolved-threads/
