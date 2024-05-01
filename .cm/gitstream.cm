@@ -1,0 +1,40 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  estimated_time_to_review:
+  if:
+    - true
+  run:
+    - action: add-label@v1
+      args:
+        label: "{{ calc.etr }} min review"
+        color: {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
+
+  safe_changes:
+  # Triggered for any changes that only affect formatting, documentation, tests, or images
+  if:
+    - {{ is.formatting or is.docs or is.tests or is.image }}
+  # Apply a safe change label, approve the PR and explain why in a comment.
+  run: 
+    - action: add-label@v1
+      args:
+        label: 'safe-change'
+    - action: approve@v1
+    - action: add-comment@v1
+      args:
+        comment: |
+          This PR is considered a safe change and has been automatically approved.
+
+# These custom expressions are used in the safe_changes automation
+is:
+  formatting: {{ source.diff.files | isFormattingChange }}
+  docs: {{ files | allDocs }}
+  tests: {{ files | allTests }}
+  image: {{ files | allImages }}
+
+# https://docs.gitstream.cm/filter-functions/#estimatedreviewtime
+calc:
+  etr: {{ branch | estimatedReviewTime }}
