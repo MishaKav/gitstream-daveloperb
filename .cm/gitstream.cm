@@ -24,15 +24,25 @@ manifest:
 # | Automations
 # +----------------------------------------------------------------------------+
 
-triggers:
-  on:
-    - commit
-    - pr_created
-  exclude:
-    branch:
-      - patch
+# triggers:
+#   on:
+#     - commit
+#     - pr_created
+#   exclude:
+#     branch:
+#       - patch
 
 automations:
+  safe_changes:
+    # Triggered for any changes that only affect formatting, documentation, tests, or images
+    if:
+      - {{ is.formatting or is.docs or is.tests or is.image }}
+    # Apply a safe change label, approve the PR and explain why in a comment.
+    run: 
+      - action: add-label@v1
+        args:
+          label: 'safe-change'
+
   # Apply color coded labels to PRs based on the estimated time to review.
   # https://docs.gitstream.cm/automations/provide-estimated-time-to-review/
   estimated_time_to_review:
