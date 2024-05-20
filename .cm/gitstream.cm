@@ -112,3 +112,9 @@ colors:
   green: '0e8a16'
   blue: '1d76db'
   purple: '5319e7'
+
+is:
+  formatting: {{ source.diff.files | isFormattingChange }}
+  docs: {{ files | allDocs }}
+  tests: {{ files | allTests }}
+  image: {{ files | allImages }}
