@@ -20,7 +20,7 @@ jobs:
           RESPONSE=$(curl -X POST \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token $GITHUB_TOKEN" \
-            https://api.github.com/repos/EladKohavi/Mexico_winter/check-runs \
+            https://api.github.com/repos/MishaKav/gitstream-daveloperb/check-runs \
             -d @- << EOF
           {
             "name": "Example Check",
@@ -40,7 +40,7 @@ jobs:
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token $GITHUB_TOKEN" \
-            https://api.github.com/repos/EladKohavi/Mexico_winter/check-runs/$CHECK_RUN_ID \
+            https://api.github.com/repos/MishaKav/gitstream-daveloperb/check-runs/$CHECK_RUN_ID \
             -d @- << EOF
           {
             "status": "completed",
