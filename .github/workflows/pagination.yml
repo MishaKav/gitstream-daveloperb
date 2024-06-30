@@ -1,4 +1,4 @@
-name: Run 20 Automations with Delay
+name: Run 30 Automations with Delay
 
 on: pull_request
 
@@ -301,3 +301,153 @@ jobs:
 
       - name: Run Automation 20
         run: echo automation-20
+
+  automation-21:
+    runs-on: ubuntu-latest
+    needs: automation-20
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 21
+        run: echo automation-21
+
+  automation-22:
+    runs-on: ubuntu-latest
+    needs: automation-21
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 22
+        run: echo automation-22
+
+  automation-23:
+    runs-on: ubuntu-latest
+    needs: automation-22
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 23
+        run: echo automation-23
+
+  automation-24:
+    runs-on: ubuntu-latest
+    needs: automation-23
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 24
+        run: echo automation-24
+
+  automation-25:
+    runs-on: ubuntu-latest
+    needs: automation-24
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 25
+        run: echo automation-25
+
+  automation-26:
+    runs-on: ubuntu-latest
+    needs: automation-25
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 26
+        run: echo automation-26
+
+  automation-27:
+    runs-on: ubuntu-latest
+    needs: automation-26
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 27
+        run: echo automation-27
+
+  automation-28:
+    runs-on: ubuntu-latest
+    needs: automation-27
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 28
+        run: echo automation-28
+
+  automation-29:
+    runs-on: ubuntu-latest
+    needs: automation-28
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 29
+        run: echo automation-29
+
+  automation-30:
+    runs-on: ubuntu-latest
+    needs: automation-29
+    steps:
+      - name: Wait for 15 seconds
+        run: |
+          echo "Waiting for 15 seconds..."
+          sleep 15
+          echo "Wait 15 completed!"
+
+      - uses: actions/checkout@v4
+
+      - name: Run Automation 30
+        run: echo automation-30
