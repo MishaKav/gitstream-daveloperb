@@ -1,0 +1,49 @@
+name: Wait Workflow
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for 500 seconds
+        run: |
+          echo "Waiting for 500 seconds..."
+          sleep 500
+          echo "Wait completed!"
+
+      - name: Create Check Run
+        id: create_check_run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RESPONSE=$(curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            https://api.github.com/repos/EladKohavi/Mexico_winter/check-runs \
+            -d @- << EOF
+          {
+            "name": "Example Check",
+            "head_sha": "${{ github.event.pull_request.head.sha }}",
+            "status": "in_progress"
+          }
+          EOF
+          )
+          echo "$RESPONSE"
+          echo "::set-output name=check_run_id::$(echo $RESPONSE | jq -r '.id')"
+
+      - name: Update Check Run Status
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHECK_RUN_ID: ${{ steps.create_check_run.outputs.check_run_id }}
+        run: |
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            https://api.github.com/repos/EladKohavi/Mexico_winter/check-runs/$CHECK_RUN_ID \
+            -d @- << EOF
+          {
+            "status": "completed",
+            "conclusion": "success"
+          }
+          EOF
