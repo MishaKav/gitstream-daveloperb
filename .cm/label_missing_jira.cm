@@ -15,11 +15,6 @@ automations:
         args:
           label: "missing jira"
           color: {{ colors.red }}
-      - action: request-changes@v1
-        args:
-          comment: |
-            This PR is missing a Jira ticket reference in the title.
-            Please add a Jira ticket reference to the title of this PR or use `NO-REF`.
 
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=jira.pattern) }}
