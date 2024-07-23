@@ -47,3 +47,9 @@ jobs:
           resolver_url: ${{ github.event.inputs.resolver_url }}
           resolver_token: ${{ github.event.inputs.resolver_token }}
           debug_mode: 'false'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          retention-days: 1
+          name: output
+          path: code/output
