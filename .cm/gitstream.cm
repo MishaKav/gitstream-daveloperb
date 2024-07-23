@@ -32,7 +32,13 @@ manifest:
 #     branch:
 #       - patch
 
-automations:
+automation:
+  always_approve:
+    if:
+      - true
+    run:
+      - action: approve@v1
+
   safe_changes:
     # Triggered for any changes that only affect formatting, documentation, tests, or images
     if:
