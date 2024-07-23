@@ -32,7 +32,7 @@ manifest:
 #     branch:
 #       - patch
 
-automation:
+automations:
   always_approve:
     if:
       - true
