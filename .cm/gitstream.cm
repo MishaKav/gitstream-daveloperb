@@ -38,6 +38,10 @@ automations:
       - true
     run:
       - action: approve@v1
+      - action: add-comment@v1
+          args:
+            comment: |
+              gitStream add comment on safe_changes
 
   explain_code_experts:
     if:
