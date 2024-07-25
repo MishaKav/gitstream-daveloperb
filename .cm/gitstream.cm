@@ -51,9 +51,6 @@ automations:
     if:
       - true
     run: 
-      - action: add-label@v1
-        args:
-          label: 'safe-change'
       - action: add-comment@v1
         args:
           comment: |
