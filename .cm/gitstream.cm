@@ -126,4 +126,4 @@ is:
   tests: {{ files | allTests }}
   image: {{ files | allImages }}
 
-owners: {{ repo | codeowners(env.CODEOWNERS) }}
+owners: {{ repo | checkForCodeowners(env.CODEOWNERS) }}
