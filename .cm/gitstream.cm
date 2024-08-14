@@ -33,16 +33,6 @@ manifest:
 #       - patch
 
 automations:
-  always_approve:
-    if:
-      - true
-    run:
-      - action: approve@v1
-      - action: add-comment@v1
-        args:
-          comment: |
-            gitStream add comment on safe_changes
-
   explain_code_experts:
     if:
       - true
@@ -135,3 +125,5 @@ is:
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
   image: {{ files | allImages }}
+
+owners: {{ repo | codeowners(env.CODEOWNERS) }}

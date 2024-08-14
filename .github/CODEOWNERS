@@ -1,0 +1,9 @@
+# CODEOWNERS file for GitHub
+
+# This file specifies who is responsible for the README.md file in this repository
+
+# MishaKav is the owner of the README.md file
+
+README.md @MishaKav
+
+# Note: The \* wildcard is not used here because we're only specifying ownership for README.md
