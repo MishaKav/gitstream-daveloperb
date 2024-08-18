@@ -39,6 +39,7 @@ jobs:
       - name: Evaluate Rules
         uses: linear-b/gitstream-github-action@v2
         env:
+          ENABLE_DEBUG_ARTIFACTS: true
           CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
@@ -49,9 +50,3 @@ jobs:
           resolver_url: ${{ github.event.inputs.resolver_url }}
           resolver_token: ${{ github.event.inputs.resolver_token }}
           debug_mode: 'false'
-
-      - uses: actions/upload-artifact@v4
-        with:
-          retention-days: 1
-          name: output
-          path: code/output
