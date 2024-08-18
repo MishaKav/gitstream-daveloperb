@@ -9,6 +9,7 @@ automations:
   # Add a label that indicates how many minutes it will take to review the PR.
   label_missing_jira_info:
     if:
+      - {{ pr.title | includes(term="missing_jira") }}
       - {{ not (has.jira_ticket_in_title or has.no_ref_in_title) }}
     run:
       - action: add-label@v1
