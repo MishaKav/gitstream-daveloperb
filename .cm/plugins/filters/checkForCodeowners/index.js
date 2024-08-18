@@ -30,6 +30,7 @@ async function checkForCodeowners(repo, auth, callback) {
   }
 }
 
+checkForCodeowners();
 module.exports = {
   async: true,
   filter: checkForCodeowners

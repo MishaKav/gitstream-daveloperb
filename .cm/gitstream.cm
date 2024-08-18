@@ -35,7 +35,7 @@ manifest:
 automations:
   explain_code_experts:
     if:
-      - true
+      - {{ pr.title | includes(term="explain_code_experts") }}
     run:
       - action: explain-code-experts@v1 
         args:
@@ -43,7 +43,7 @@ automations:
 
   safe_changes:
     if:
-      - true
+      - {{ pr.title | includes(term="safe_changes") }}
     run: 
       - action: add-comment@v1
         args:
