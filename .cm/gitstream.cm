@@ -125,5 +125,3 @@ is:
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
   image: {{ files | allImages }}
-
-owners: {{ repo | checkForCodeowners(env.CODEOWNERS) }}
