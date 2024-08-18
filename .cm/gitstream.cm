@@ -43,6 +43,7 @@ automations:
 
   safe_changes:
     if:
+      - {{ is.safe }}
       - {{ pr.title | includes(term="safe_changes") }}
     run: 
       - action: add-comment@v1
@@ -121,6 +122,7 @@ colors:
   purple: '5319e7'
 
 is:
+  safe: {{ is.docs or is.tests or is.asset or is.formatting }}
   formatting: {{ source.diff.files | isFormattingChange }}
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
