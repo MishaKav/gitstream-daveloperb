@@ -16,9 +16,10 @@ async function checkForCodeowners(repo, auth, callback) {
 
   console.log('repo', repo);
   console.log('repoName', repo?.name);
+
   const res = await octokit.repos.getContent({
     owner: 'MishaKav',
-    repo: repo.name,
+    repo: repo?.name || 'gitstream-daveloperb',
     path: '.github/CODEOWNERS'
   });
 
