@@ -33,6 +33,16 @@ manifest:
 #       - patch
 
 automations:
+  check_timestamp:
+    if:
+      - {{ pr.title | includes(term="check_timestamp") }}
+      - action: send-http-request@v1
+        args:
+          url: https://webhook.site/ad6bd45b-0c23-4b23-9484-024c69e24a47
+          method: "POST"
+          headers: '{"Content-type": "application/json", "x-api-key": "{{ env.LINEARB_PUBLIC_API }}" }'
+          body: '{"metric_name": "tests_added","timestamp": "{{ timestamp }}","value": {{ number_of_tests }},"source": "gitstream","entity": {"pr_url": "{{ pr.url }}"}, "tags": {"pr_approval": "{{ pr.approvals | join(',') }}","provider": "github","contributor": "{{ pr.author }}"}}'
+
   explain_code_experts:
     if:
       - {{ pr.title | includes(term="explain_code_experts") }}
@@ -127,3 +137,5 @@ is:
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
   image: {{ files | allImages }}
+
+timestamp: {{ "" | getTimestamp }}
