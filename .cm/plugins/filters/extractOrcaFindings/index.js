@@ -17,7 +17,7 @@ module.exports = pr => {
   };
 
   // Orca comments are added as PR review
-  const orcaComment = pr.reviews.filter(x => x.commenter.includes('orca-security'));
+  const orcaComment = pr.comments.filter(x => x.content?.includes('orcasecurity'));
 
   if (orcaComment.length) {
     const orcaCommentArray = orcaComment[0].content.split('\n');

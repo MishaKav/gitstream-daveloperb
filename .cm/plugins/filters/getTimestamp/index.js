@@ -1,5 +1,4 @@
 module.exports = dummy => {
-  const timestamp = Date.now();
-  console.log(`Timestamp: ${timestamp}`);
-  return timestamp;
+  const timestamp = new Date().toISOString();
+  return JSON.stringify(timestamp);
 };
