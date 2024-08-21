@@ -1,5 +1,5 @@
 module.exports = dummy => {
-  const timestamp = new Date().toString();
+  const timestamp = Date.now();
   console.log(`Timestamp: ${timestamp}`);
   return timestamp;
 };
