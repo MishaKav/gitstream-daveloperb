@@ -41,7 +41,7 @@ automations:
         args:
           url: https://webhook.site/ad6bd45b-0c23-4b23-9484-024c69e24a47
           method: "POST"
-          body: '{"metric_name": "tests_added", "timestamp": {{ timestamp }}, "value": {{ number_of_tests }}}'
+          body: '{"metric_name": "tests_added", "timestamp": "{{ timestamp }}", "value": {{ number_of_tests }}}'
 
   explain_code_experts:
     if:
