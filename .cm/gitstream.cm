@@ -33,6 +33,16 @@ manifest:
 #       - patch
 
 automations:
+  comment_on_main_branch:
+    if:
+      - {{ is.main_branch }}
+      - {{ pr.title | includes(term="comment_on_main_branch") }}
+    run: 
+      - action: add-comment@v1
+        args:
+          comment: |
+            gitStream add comment because the base branch is {{ branch.base }} which is the default branch
+
   check_timestamp:
     if:
       - {{ pr.title | includes(term="check_timestamp") }}
@@ -137,5 +147,6 @@ is:
   docs: {{ files | allDocs }}
   tests: {{ files | allTests }}
   image: {{ files | allImages }}
+  main_branch: {{ branch.base == "develop" or branch.base == "main" or branch.base == "master"}}
 
 timestamp: {{ "" | getTimestamp }}
