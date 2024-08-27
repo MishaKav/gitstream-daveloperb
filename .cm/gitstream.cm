@@ -49,7 +49,7 @@ automations:
     run:
       - action: send-http-request@v1
         args:
-          url: https://webhook.site/ad6bd45b-0c23-4b23-9484-024c69e24a47
+          url: https://webhook.site/0702387f-25ca-4e95-ad72-8987a327d9a4
           method: "POST"
           body: '{"metric_name": "tests_added", "timestamp": "{{ timestamp }}", "value": {{ number_of_tests }}}'
 
@@ -84,14 +84,14 @@ automations:
 
   # Flag PRs that are missing a Jira ticket reference in the title or description.
   # https://docs.gitstream.cm/integrations/jira/
-  # label_missing_jira_info:
-  #   if:
-  #     - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
-  #   run:
-  #     - action: add-label@v1
-  #       args:
-  #         label: "missing-jira"
-  #         color: {{ colors.red }}
+   label_missing_jira_info:
+     if:
+       - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
+     run:
+       - action: add-label@v1
+         args:
+           label: "missing-jira"
+           color: {{ colors.red }}
 
   # Flag PRs that have unresolved comment threads.
   # https://docs.gitstream.cm/automations/standard/label-management/label-unresolved-threads/
