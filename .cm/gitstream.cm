@@ -40,9 +40,13 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            getTimestamp: {{ "" | getTimestamp }}
             encode: {{ "Hello World" | encode }}
+
+            getTimestamp: {{ "" | getTimestamp }}
+
             decode: {{ "base64: SGVsbG8gV29ybGQ=" | decode }}
+
+            End of Line
 
   comment_on_main_branch:
     if:
