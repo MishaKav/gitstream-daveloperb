@@ -33,6 +33,17 @@ manifest:
 #       - patch
 
 automations:
+  comment_utils:
+    if:
+      - {{ pr.title | includes(term="comment_utils") }}
+    run: 
+      - action: add-comment@v1
+        args:
+          comment: |
+            getTimestamp: `{{ "" | getTimestamp }}`
+            encode: `{{ "Hello World" | encode }}`
+            decode: `{{ "base64: SGVsbG8gV29ybGQ=" | decode }}`
+
   comment_on_main_branch:
     if:
       - {{ is.main_branch }}
