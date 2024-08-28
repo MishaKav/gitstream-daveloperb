@@ -42,11 +42,9 @@ automations:
           comment: |
             decode: {{ "base64: SGVsbG8gV29ybGQ=" | decode }}
 
-            encode: {{ "Hello World" | encode }}
-
             getTimestamp: {{ "" | getTimestamp }}
 
-            End of Line
+            encode: {{ "Hello World" | encode }}
 
   comment_on_main_branch:
     if:
