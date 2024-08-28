@@ -40,11 +40,11 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
+            decode: {{ "base64: SGVsbG8gV29ybGQ=" | decode }}
+
             encode: {{ "Hello World" | encode }}
 
             getTimestamp: {{ "" | getTimestamp }}
-
-            decode: {{ "base64: SGVsbG8gV29ybGQ=" | decode }}
 
             End of Line
 
