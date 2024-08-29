@@ -53,4 +53,4 @@ jobs:
 
       - name: Adding PR Url
         run: |
-          echo '[${{ fromJSON(inputs.client_payload).repo }}#${{ inputs.headRef }}](${{ fromJSON(fromJSON(fromJSON(inputs.client_payload)).prContext).url }})' >> $GITHUB_STEP_SUMMARY
+          echo '[${{ fromJSON(inputs.client_payload).repo }}#${{ inputs.headRef }}](${{ fromJSON(fromJSON(inputs.client_payload).prContext).url }})' >> $GITHUB_STEP_SUMMARY
