@@ -36,6 +36,10 @@ jobs:
     runs-on: ubuntu-latest
     name: gitStream workflow automation
     steps:
+      - name: Adding PR Url
+        run: |
+          echo '[${{ fromJSON(fromJSON(inputs.client_payload)).repo }}#${{ inputs.headRef }}](${{ fromJSON(fromJSON(inputs.client_payload)).prContext.url }})' >> $GITHUB_STEP_SUMMARY
+
       - name: Evaluate Rules
         uses: linear-b/gitstream-github-action@v2-misha
         env:
@@ -50,7 +54,3 @@ jobs:
           resolver_url: ${{ github.event.inputs.resolver_url }}
           resolver_token: ${{ github.event.inputs.resolver_token }}
           debug_mode: 'false'
-
-      - name: Adding PR Url
-        run: |
-          echo '[${{ fromJSON(inputs.client_payload).repo }}#${{ inputs.headRef }}](${{ fromJSON(fromJSON(inputs.client_payload).prContext).url }})' >> $GITHUB_STEP_SUMMARY
