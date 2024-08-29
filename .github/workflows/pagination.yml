@@ -10,8 +10,8 @@ jobs:
       matrix:
         item: [1, 2, 3, 4, 5]
     steps:
-      - name: Wait for ${matrix.item} seconds
+      - name: Wait for ${{ matrix.item }} seconds
         run: |
-          echo "Waiting for ${matrix.item} seconds..."
-          sleep ${matrix.item}
-          echo "Wait ${matrix.item} completed!"
+          echo "Waiting for ${{ matrix.item }} seconds..."
+          sleep ${{ matrix.item }}
+          echo "Wait ${{ matrix.item }} completed!"
