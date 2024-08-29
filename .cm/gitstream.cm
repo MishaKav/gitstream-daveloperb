@@ -99,6 +99,7 @@ automations:
   # https://docs.gitstream.cm/integrations/jira/
   label_missing_jira_info:
      if:
+       - {{ pr.title | includes(term="missing-jira") }}
        - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
      run:
        - action: add-label@v1
