@@ -2,16 +2,22 @@
 manifest:
   version: 1.0
 
+# triggers:
+#   on:
+#     - pr_created
+
 automations:
   suggest_issues:
-    on:
-      - pr_created
     if:
       - true
     run:
-      - action: send-http-request@v1
+      - action: add-comment@v1
         args:
-          url: http://www.google.com
-          method: GET
+          comment: |
+            Select one of the suggested issues to link to this PR. Once you make a selection, gitStream will automatically update the PR title and description with the selected issue key (taking into account issues opened up to the last 2 hours).
 
-suggested_issues: {{ pr | suggestedIssues(branch, env.TICKET_SUGGESTION_TOKEN) }}
+            {{ pr | suggestedIssues(branch, env.TICKET_SUGGESTION_TOKEN) }}
+
+            *✨ This list was created using LinearB’s AI service*
+
+# suggested_issues: {{ pr | suggestedIssues(branch, env.TICKET_SUGGESTION_TOKEN) }}
