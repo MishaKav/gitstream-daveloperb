@@ -12,7 +12,7 @@ automations:
     run:
       - action: send-http-request@v1
         args:
-          url: "http://www.google.com"
+          url: http://www.google.com
           method: GET
 
 suggested_issues: {{ pr | suggestedIssues(branch, env.TICKET_SUGGESTION_TOKEN) }}
