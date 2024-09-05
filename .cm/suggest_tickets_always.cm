@@ -1,15 +1,14 @@
 # -*- mode: yaml -*-
+
 manifest:
   version: 1.0
 
-# triggers:
-#   on:
-#     - pr_created
-
 automations:
+  # Add comment that suggests tickets for this PR when there is no linked
+  # ticket in the title or description
   suggest_issues:
     if:
-      - true
+      - {{ pr.labels | match(term='suggest-ticket') | some }}
     run:
       - action: add-comment@v1
         args:
@@ -19,5 +18,3 @@ automations:
             {{ pr | suggestedIssues(branch, env.TICKET_SUGGESTION_TOKEN) }}
 
             *✨ This list was created using LinearB’s AI service*
-
-# suggested_issues: {{ pr | suggestedIssues(branch, env.TICKET_SUGGESTION_TOKEN) }}
