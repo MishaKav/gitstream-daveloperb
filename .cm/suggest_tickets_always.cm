@@ -1,0 +1,18 @@
+# -*- mode: yaml -*-
+manifest:
+  version: 1.0
+
+automations:
+  # jus
+  suggest_issues:
+    on:
+      - pr_created
+    if:
+      - true
+    run:
+      - action: send-http-request@v1
+        args:
+          url: "http://www.google.com"
+          method: GET
+
+suggested_issues: {{ pr | suggestedIssues(branch, env.TICKET_SUGGESTION_TOKEN) }}
