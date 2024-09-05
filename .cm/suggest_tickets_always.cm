@@ -3,7 +3,6 @@ manifest:
   version: 1.0
 
 automations:
-  # jus
   suggest_issues:
     on:
       - pr_created
