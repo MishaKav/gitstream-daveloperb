@@ -4,14 +4,131 @@ manifest:
   version: 1.0
 
 automations:
+
+  # Automatically add reviewers to PRs
+  assign_team:
+    if:
+      - {{ not pr.draft }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          team_reviewers: [misha-group]
+
+  # Assign code experts
+  # People who have worked on this code, based on git blame
+  # https://docs.gitstream.cm/filter-functions/#codeexperts
+  assign_code_experts:
+    if:
+      - {{ not pr.draft }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: {{ repo | codeExperts(gt=29) | random }}
+      - action: explain-code-experts@v1 
+        args:
+          gt: 10
+
+  # Assign people who have not worked on this code
+  # Done to improve knowledge sharing
   assign_knowledge_sharing:
     if:
        - {{ not pr.draft }}
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: {{ repo | codeExperts(gt=90) | random }}
+          reviewers: {{ repo | codeExperts(lt=30) | random }}
       - action: add-comment@v1
         args:
           comment: |
             gitStream has assigned a reviewer to increase knowledge sharing on this PR.
+
+  # Apply color coded labels to PRs based on the estimated time to review.
+  # https://docs.gitstream.cm/automations/provide-estimated-time-to-review/
+  estimated_time_to_review:
+    if:
+      - true
+    run:
+      - action: add-label@v1
+        args:
+          label: "{{ calc.etr }} min review"
+          color: {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
+
+  # Flag PRs that are missing a Jira ticket reference in the title or description.
+  # https://docs.gitstream.cm/integrations/jira/
+  label_missing_jira_info:
+    if:
+      - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "missing-jira"
+          color: {{ colors.red }}
+
+  # Add a label for each microservice / component that has been changed
+{% for component in components %}
+  add_component_label_{{ component.name | lower }}:
+    if:
+      - {{ files | match(regex=component.regex) | some }}
+    run:
+      - action: add-label@v1
+        args:
+          label: {{ component.name }}
+{% endfor %}
+
+# +----------------------------------------------------------------------------+
+# | Custom Expressions                                                         |
+# | https://docs.gitstream.cm/how-it-works/#custom-expressions                 |
+# +----------------------------------------------------------------------------+
+
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+
+
+colors:
+  red: 'b60205'
+  yellow: 'fbca04'
+  green: '0e8a16'
+
+has:
+  jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
+  jira_ticket_in_desc: {{ pr.description | includes(regex=r/atlassian.net\/browse\/\w{1,}-\d{3,4}/) }}
+
+components:
+- name: "bigquery-service"
+  regex: "r/bigquery-service\//"
+- name: "event-service"
+  regex: "r/event-service\//"
+- name: "gm-service"
+  regex: "r/gm-service\//"
+- name: "information-api"
+  regex: "r/information-api\//"
+- name: "item-service"
+  regex: "r/item-service\//"
+- name: "iws-service"
+  regex: "r/iws-service\//"
+- name: "logimat-service"
+  regex: "r/logimat-service\//"
+- name: "mhs-service"
+  regex: "r/mhs-service\//"
+- name: "notification-service"
+  regex: "r/notification-service\//"
+- name: "packing-service"
+  regex: "r/packing-service\//"
+- name: "pick-request-service"
+  regex: "r/pick-request-service\//"
+- name: "report-notification-service"
+  regex: "r/report-notification-service\//"
+- name: "routing-service"
+  regex: "r/routing-service\//"
+- name: "stock-service"
+  regex: "r/stock-service\//"
+- name: "synq-service"
+  regex: "r/synq-service\//"
+- name: "tornado-service"
+  regex: "r/tornado-service\//"
+- name: "utility-service"
+  regex: "r/utility-service\//"
+- name: "test-framework"
+  regex: "r/test-framework\//"
+- name: "test-stubserver"
+  regex: "r/test-stubserver\//"
