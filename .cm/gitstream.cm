@@ -19,7 +19,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: {{ repo | codeExperts(gt=29) | random }}
+          reviewers: {{ repo | codeExperts(gt=90) | random }}
       - action: explain-code-experts@v1 
         args:
           gt: 10
@@ -31,7 +31,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: {{ repo | codeExperts(lt=30) | random }}
+          reviewers: {{ repo | codeExperts(lt=10) | random }}
       - action: add-comment@v1
         args:
           comment: |
