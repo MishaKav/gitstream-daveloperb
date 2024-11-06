@@ -10,4 +10,4 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: {{ repo | codeExperts(gt=29) }}
+          reviewers: {{ repo | codeExperts(gt=79) }}
