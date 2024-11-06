@@ -1,10 +1,7 @@
 # -*- mode: yaml -*-
-
 manifest:
   version: 1.0
-
 automations:
-
   # Automatically add reviewers to PRs
   assign_team:
     if:
@@ -12,8 +9,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [EladKohavi]
-
+          team_reviewers: {{ pr.author_teams | first }}
   # Assign code experts
   # People who have worked on this code, based on git blame
   # https://docs.gitstream.cm/filter-functions/#codeexperts
@@ -23,11 +19,10 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: {{ repo | codeExperts(gt=87) | random }}
+          reviewers: {{ repo | codeExperts(gt=29) | random }}
       - action: explain-code-experts@v1 
         args:
           gt: 10
-
   # Assign people who have not worked on this code
   # Done to improve knowledge sharing
   assign_knowledge_sharing:
@@ -36,12 +31,11 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: {{ repo | codeExperts(lt=13) | random }}
+          reviewers: {{ repo | codeExperts(lt=30) | random }}
       - action: add-comment@v1
         args:
           comment: |
             gitStream has assigned a reviewer to increase knowledge sharing on this PR.
-
   # Apply color coded labels to PRs based on the estimated time to review.
   # https://docs.gitstream.cm/automations/provide-estimated-time-to-review/
   estimated_time_to_review:
@@ -52,7 +46,6 @@ automations:
         args:
           label: "{{ calc.etr }} min review"
           color: {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
-
   # Flag PRs that are missing a Jira ticket reference in the title or description.
   # https://docs.gitstream.cm/integrations/jira/
   label_missing_jira_info:
@@ -63,7 +56,6 @@ automations:
         args:
           label: "missing-jira"
           color: {{ colors.red }}
-
   # Add a label for each microservice / component that has been changed
 {% for component in components %}
   add_component_label_{{ component.name | lower }}:
@@ -74,25 +66,19 @@ automations:
         args:
           label: {{ component.name }}
 {% endfor %}
-
 # +----------------------------------------------------------------------------+
 # | Custom Expressions                                                         |
 # | https://docs.gitstream.cm/how-it-works/#custom-expressions                 |
 # +----------------------------------------------------------------------------+
-
 calc:
   etr: {{ branch | estimatedReviewTime }}
-
-
 colors:
   red: 'b60205'
   yellow: 'fbca04'
   green: '0e8a16'
-
 has:
   jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
   jira_ticket_in_desc: {{ pr.description | includes(regex=r/atlassian.net\/browse\/\w{1,}-\d{3,4}/) }}
-
 components:
 - name: "bigquery-service"
   regex: "r/bigquery-service\//"
