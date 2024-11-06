@@ -4,10 +4,14 @@ manifest:
   version: 1.0
 
 automations:
-  assign_code_experts:
+  assign_knowledge_sharing:
     if:
-      - {{ not pr.draft }}
+       - {{ not pr.draft }}
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: {{ repo | codeExperts(gt=79) | random }}
+          reviewers: {{ repo | codeExperts(gt=90) | random }}
+      - action: add-comment@v1
+        args:
+          comment: |
+            gitStream has assigned a reviewer to increase knowledge sharing on this PR.
