@@ -32,20 +32,20 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const commits = await github.repos.listCommits({
+            const commitSha = '${{ steps.get-commit.outputs.sha }}';
+            const { data: commit } = await github.repos.getCommit({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: '${{ steps.get-commit.outputs.sha }}'
+              ref: commitSha
             });
-            const commit = commits.data[0];
-            console.log(commit);
-            const prs = await github.pulls.list({
+            const branchName = commit.commit.tree.url.split('/').pop();
+            const { data: prs } = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: commit.committer.login + ':' + commit.sha
+              head: `${context.repo.owner}:${branchName}`
             });
-            console.log(prs.data);
-            return prs.data.length > 0 ? prs.data[0].number : '';
+            console.log(prs);
+            return prs.length > 0 ? prs[0].number : '';
 
       - name: Check for auto-deploy label
         if: steps.get-pr.outputs.result != ''
