@@ -1,4 +1,4 @@
-name: Create Tag on Merge and Publish 
+name: Create Tag on Merge and Publish
 
 on:
   workflow_dispatch:
@@ -19,7 +19,31 @@ jobs:
         run: |
           npm run create-tag
 
+      - name: Get latest commit
+        id: get-commit
+        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+
+      - name: Check for associated pull request
+        id: get-pr
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commits = await github.repos.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.get-commit.outputs.sha }}'
+            });
+            const commit = commits.data[0];
+            const prs = await github.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: commit.committer.login + ':' + commit.sha
+            });
+            return prs.data.length > 0 ? prs.data[0].number : '';
+
       - name: Check for auto-deploy label
+        if: steps.get-pr.outputs.result != ''
         id: check-label
         uses: actions/github-script@v4
         with:
@@ -28,7 +52,7 @@ jobs:
             const pr = await github.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number
+              pull_number: ${{ steps.get-pr.outputs.result }}
             });
             const labels = pr.data.labels.map(label => label.name);
             return labels.includes('auto-deploy');
