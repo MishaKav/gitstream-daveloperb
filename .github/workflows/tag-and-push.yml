@@ -13,6 +13,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Create and push new tag
         id: create-tag
@@ -35,11 +38,13 @@ jobs:
               sha: '${{ steps.get-commit.outputs.sha }}'
             });
             const commit = commits.data[0];
+            console.log(commit);
             const prs = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: commit.committer.login + ':' + commit.sha
             });
+            console.log(prs.data);
             return prs.data.length > 0 ? prs.data[0].number : '';
 
       - name: Check for auto-deploy label
