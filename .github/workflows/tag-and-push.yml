@@ -55,7 +55,7 @@ jobs:
       - name: Create GitHub Release
         if: steps.check-label.outputs.result == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           NEW_TAG: ${{ steps.create-tag.outputs.new_tag }}
         run: |
           gh release create $NEW_TAG --generate-notes
