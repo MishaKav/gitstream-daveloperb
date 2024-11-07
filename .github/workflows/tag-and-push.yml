@@ -9,6 +9,8 @@ on:
 jobs:
   create_tag:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     timeout-minutes: 5
 
     steps:
