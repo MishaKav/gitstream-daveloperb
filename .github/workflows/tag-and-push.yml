@@ -1,0 +1,42 @@
+name: Create Tag on Merge and Publish 
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create and push new tag
+        id: create-tag
+        run: |
+          npm run create-tag
+
+      - name: Check for auto-deploy label
+        id: check-label
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            const labels = pr.data.labels.map(label => label.name);
+            return labels.includes('auto-deploy');
+
+      - name: Create GitHub Release
+        if: steps.check-label.outputs.result == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEW_TAG: ${{ steps.create-tag.outputs.new_tag }}
+        run: |
+          gh release create $NEW_TAG --generate-notes
