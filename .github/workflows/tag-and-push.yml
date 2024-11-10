@@ -46,20 +46,15 @@ jobs:
             }
             return false;
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release & Deploy
         if: steps.should-deploy.outputs.result == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create $NEW_TAG --generate-notes
-
-      - name: Trigger Deployment Workflow
-        if: steps.should-deploy.outputs.result == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const workflow_id = 'deploy.workflow.yml';
-            const ref = '${{ env.NEW_TAG }}';
-
-            github.rest.actions.createWorkflowDispatch({ owner, repo, workflow_id, ref, event_type: 'deploy', client_payload: { 'env': 'prod' } })
+          gh api \
+          --method POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/${{ github.repository_owner }}/${{ github.repository }}/actions/workflows/deploy.workflow.yml/dispatches \
+          -f "ref=$NEW_TAG" -f "inputs[env]=prod"
