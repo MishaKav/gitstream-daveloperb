@@ -23,7 +23,7 @@ jobs:
 
       - name: Get latest commit
         id: get-commit
-        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+        run: echo "LAST_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Check for associated pull request and auto-release label
         id: should-release
@@ -32,7 +32,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
-            const commit_sha = '${{ steps.get-commit.outputs.sha }}';
+            const commit_sha = '${{ env.LAST_SHA }}';
             const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({ commit_sha, owner, repo });
 
             if (prs?.length > 0) {
