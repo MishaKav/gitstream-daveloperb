@@ -25,39 +25,27 @@ jobs:
         id: get-commit
         run: echo "::set-output name=sha::$(git rev-parse HEAD)"
 
-      - name: Check for associated pull request
-        id: get-pr
+      - name: Check for associated pull request and auto-release label
+        id: should-release
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const commitSha = '${{ steps.get-commit.outputs.sha }}';
-            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-              commit_sha: commitSha,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            })
-            return prs.length > 0 ? prs[0].number : '';
+            const { owner, repo } = context.repo;
+            const commit_sha = '${{ steps.get-commit.outputs.sha }}';
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({ commit_sha, owner, repo });
 
-      - name: Check for auto-deploy label
-        if: steps.get-pr.outputs.result != ''
-        id: check-label
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: ${{ steps.get-pr.outputs.result }}
-            });
-            const labels = pr.data.labels.map(label => label.name);
-            return labels.includes('auto-deploy');
+            if (prs?.length > 0) {
+              const pull_number = prs[0].number;
+              const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number });
+              return pr.labels.some(label => label.name.includes('auto-release'));
+            }
+            return false;
 
       - name: Create GitHub Release
-        if: steps.check-label.outputs.result == 'true'
+        if: steps.should-release.outputs.result == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEW_TAG: ${{ steps.create-tag.outputs.new_tag }}
         run: |
           gh release create $NEW_TAG --generate-notes
