@@ -20,12 +20,15 @@ jobs:
         id: create-tag
         run: npm run create-tag
 
+      - name: Set NEW_TAG environment variable
+        run: echo "NEW_TAG=${{ steps.create-tag.outputs.new_tag }}" >> $GITHUB_ENV
+
       - name: Get latest commit
         id: get-commit
         run: echo "LAST_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Check for associated pull request and auto-release label
-        id: should-release
+        id: should-deploy
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,9 +45,19 @@ jobs:
             return false;
 
       - name: Create GitHub Release
-        if: steps.should-release.outputs.result == 'true'
+        if: steps.should-deploy.outputs.result == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NEW_TAG: ${{ steps.create-tag.outputs.new_tag }}
         run: |
           gh release create $NEW_TAG --generate-notes
+
+      - name: Trigger Deployment Workflow
+        if: steps.should-deploy.outputs.result == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const workflow_id = 'deploy.workflow.yml';
+            const ref = '${{ env.NEW_TAG }}';
+
+            github.rest.actions.createWorkflowDispatch({ owner, repo, workflow_id, ref, event_type: 'deploy', client_payload: { 'env': 'prod' } })
