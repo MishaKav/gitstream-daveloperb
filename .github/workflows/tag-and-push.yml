@@ -57,4 +57,4 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           /repos/${{ github.repository_owner }}/${{ github.repository }}/actions/workflows/deploy.workflow.yml/dispatches \
-          -f "ref=$NEW_TAG" -f "inputs[env]=prod"
+          -f ref=$NEW_TAG -f inputs[env]=prod
