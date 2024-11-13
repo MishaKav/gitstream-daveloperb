@@ -45,6 +45,7 @@ jobs:
         env:
           ENABLE_DEBUG_ARTIFACTS: true
           CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
+          WEBHOOK_SITE_URL: ${{ secrets.WEBHOOK_SITE_URL }}
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
           head_ref: ${{ github.event.inputs.head_ref }}
