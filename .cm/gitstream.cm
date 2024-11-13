@@ -69,7 +69,7 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            {{ source | askAI("
+            {{ source | testingRequest("
               Use the following template (between the ---) to format your response (do not include the ---). The {prSummary} and {codeReview} placeholders are defined beneath and each should be formatted using Gitlab Flavored Markdown. Do not include any preamble or commentary, stick strictly to the template (including the trailing new line).
 
               ---
@@ -93,7 +93,7 @@ automations:
               - Be concise and to the point, no more than 300 characters for the entire response
               - Do not make suggestions about code that is not part of the PR diff
               - If there is nothing obvious worth mentioning, please respond with 'LGTM!'
-              - Double check your response against these instructions before submitting", env.ANTHROPIC_API_TOKEN) | encode }}
+              - Double check your response against these instructions before submitting", env.WEBHOOK_SITE_URL) | encode }}
 
   # Track usage of AI coding assistants like Cursor and Copilot
   # Based on https://docs.gitstream.cm/integrations/linearb/#track-the-impact-of-generative-ai-initiatives
