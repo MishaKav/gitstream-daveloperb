@@ -11,7 +11,7 @@ automations:
         - action: update-title@v1
           args:
             concat_mode: replace
-            description: |
+            title: |
               {{ source | testingRequest("some title", env.WEBHOOK_SITE_URL) | encode }}
 
     describe_pr_description:
