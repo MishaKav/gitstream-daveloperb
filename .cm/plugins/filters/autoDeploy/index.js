@@ -10,7 +10,6 @@ const { Octokit } = require('@octokit/rest');
  */
 const autoDeploy = async (repo, pr, callback) => {
   try {
-    console.log('inside autoDeploy filter');
     const { labels, checks, draft, author, number } = pr;
     const prNumber = Number(number);
 
@@ -22,11 +21,9 @@ const autoDeploy = async (repo, pr, callback) => {
       return callback(null, 'skip on PR without `auto-deploy` label');
     }
 
-    console.log(`Misha Token: ${process.env.GITHUB_TOKEN}`);
-    console.log(`Misha Token Length: ${process.env.GITHUB_TOKEN?.length}`);
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-    await enableAutoMerge(octokit, repo, number);
+    await enableAutoMerge(octokit, repo, prNumber);
 
     const e2eCheck = checks.find(check => check.name === 'gitstream-e2e');
     const shouldRunE2e = !e2eCheck || e2eCheck?.conclusion === 'failure';
@@ -59,7 +56,6 @@ const autoDeploy = async (repo, pr, callback) => {
  * @param {string} repo.name - The name of the repository
  * @param {number|string} number - The pull request number
  * @returns {Promise<void>} - A promise that resolves when the auto-merge is enabled
- * @throws {Error} - Throws an error if the GraphQL request fails
  */
 const enableAutoMerge = async (octokit, repo, pullNumber) => {
   try {
@@ -68,9 +64,7 @@ const enableAutoMerge = async (octokit, repo, pullNumber) => {
       `
     query ($owner: String!, $repo: String!, $pullNumber: Int!) {
       repository(owner: $owner, name: $repo) {
-        pullRequest(number: $pullNumber) {
-          id
-        }
+        pullRequest(number: $pullNumber) { id }
       }
     }
     `,
@@ -93,17 +87,13 @@ const enableAutoMerge = async (octokit, repo, pullNumber) => {
       `
     mutation EnablePullRequestAutoMerge($pullRequestId: ID!) {
       enablePullRequestAutoMerge(input: { pullRequestId: $pullRequestId, mergeMethod: SQUASH }) {
-        pullRequest {
-          autoMergeRequest {
-            enabledAt
-          }
-        }
+        pullRequest { autoMergeRequest { enabledAt } }
       }
     }`,
       { pullRequestId }
     );
   } catch (error) {
-    console.error(error);
+    console.error(error?.message);
   }
 };
 
