@@ -10,6 +10,7 @@ const { Octokit } = require('@octokit/rest');
  */
 const autoDeploy = async (repo, pr, callback) => {
   try {
+    console.log('inside autoDeploy filter');
     const { labels, checks, draft, author, number } = pr;
     const prNumber = Number(number);
 
