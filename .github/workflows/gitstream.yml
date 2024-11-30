@@ -41,10 +41,11 @@ jobs:
           echo '[${{ fromJSON(fromJSON(inputs.client_payload)).repo }}#${{ fromJSON(fromJSON(inputs.client_payload)).prContext.number }}](${{ fromJSON(fromJSON(inputs.client_payload)).prContext.url }}) - `${{ fromJSON(fromJSON(inputs.client_payload)).branch }}` by ${{ fromJSON(fromJSON(inputs.client_payload)).prContext.author }}' >> $GITHUB_STEP_SUMMARY
 
       - name: Evaluate Rules
-        uses: linear-b/gitstream-github-action@v2
+        uses: linear-b/gitstream-github-action@v2-misha
         env:
           ENABLE_DEBUG_ARTIFACTS: true
           CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
+          WEBHOOK_SITE_URL: ${{ secrets.WEBHOOK_SITE_URL }}
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
           head_ref: ${{ github.event.inputs.head_ref }}

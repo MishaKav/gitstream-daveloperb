@@ -1,80 +1,65 @@
 # -*- mode: yaml -*-
-# This example configuration for provides basic automations to get started with gitStream.
-# View the gitStream quickstart for more examples: https://docs.gitstream.cm/examples/
+
 manifest:
   version: 1.0
 
-
-triggers:
-  exclude:
-    branch:
-      - l10n_dev
-      - dev
-      - r/(Dependabot|Renovate)/
-
-
 automations:
-  # Add a label that indicates how many minutes it will take to review the PR.
-  estimated_time_to_review:
-    on:
-      - commit
-    if:
-      - true
-    run:
-      - action: add-label@v1
-        args:
-          label: "{{ calc.etr }} min review"
-          color: {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
-  # Post a comment that lists the best experts for the files that were modified.
-  explain_code_experts:
-    if:
-      - true
-    run:
-      - action: explain-code-experts@v1
-        args:
-          gt: 10
-  # Post a comment notifying that the PR contains a TODO statement.
-  review_todo_comments:
-    if:
-      - {{ source.diff.files | matchDiffLines(regex=r/^[+].*\b(TODO|todo)\b/) | some }}
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            This PR contains a TODO statement. Please check to see if they should be removed.
-  # Post a comment that request a before and after screenshot
-  request_screenshot:
-    # Triggered for PRs that lack an image file or link to an image in the PR description
-    if:
-      - {{ not (has.screenshot_link or has.image_uploaded) }}
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            Be a legend :trophy: by adding a before and after screenshot of the changes you made, especially if they are around UI/UX.
+    describe_pr_title:
+      if:
+        - {{ pr.labels | match(term="askai") | some }}
+      run:
+        - action: update-title@v1
+          args:
+            concat_mode: replace
+            title: |
+              {{ source | testingRequest("some title", env.WEBHOOK_SITE_URL) | encode }}
+
+    describe_pr_description:
+      if:
+        - {{ pr.labels | match(term="askai") | some }}
+      run:
+        - action: update-description@v1
+          args:
+            concat_mode: append
+            description: |
+              # 📜 PR Summary 📜
+              {{ source | testingRequest("
+                Summarize the changes in this PR using bullet points.", env.WEBHOOK_SITE_URL) | encode }}
 
 
-# +----------------------------------------------------------------------------+
-# | Custom Expressions                                                         |
-# | https://docs.gitstream.cm/how-it-works/#custom-expressions                 |
-# +----------------------------------------------------------------------------+
+    ask_ai_describe_and_review:
+      if:
+        - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter(attr='content', regex=r/PR Summary/) | nope }}
+        - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter(attr='content', regex=r/gitStream Review/) | nope }}
+      run:
+        - action: add-label@v1
+          args:
+            label: "ask-ai-describe-and-review"
+        - action: add-comment@v1
+          args:
+            comment: |
+              {{ source | testingRequest("
+                Use the following template (between the ---) to format your response (do not include the ---). The {prSummary} and {codeReview} placeholders are defined beneath and each should be formatted using Gitlab Flavored Markdown. Do not include any preamble or commentary, stick strictly to the template (including the trailing new line).
 
-calc:
-  etr: {{ branch | estimatedReviewTime }}
+                ---
+                # 📜 PR Summary 📜
+                {prSummary}
 
-colors:
-  red: 'b60205'
-  yellow: 'fbca04'
-  green: '0e8a16'
+                # ✨ Code Review ✨
+                {codeReview}
 
-changes:
-  # Sum all the lines added/edited in the PR
-  additions: {{ branch.diff.files_metadata | map(attr='additions') | sum }}
-  # Sum all the line removed in the PR
-  deletions: {{ branch.diff.files_metadata | map(attr='deletions') | sum }}
-  # Calculate the ratio of new code
-  ratio: {{ (changes.additions / (changes.additions + changes.deletions)) * 100 | round(2) }}
+                ---
 
-has:
-  screenshot_link: {{ pr.description | includes(regex=r/!\[.*\]\(.*(jpg|svg|png|gif|psd).*\)/) }}
-  image_uploaded: {{ pr.description | includes(regex=r/(<img.*src.*(jpg|svg|png|gif|psd).*>)|!\[image\]\(.*github\.com.*\)/) }}
+                For {prSummary}:
+                Summarize the changes in this PR in bullet points. Keep the response concise and to the point, no more than 300 characters.
+                
+                For {codeReview}:
+                Review the PR code diff and follow the instructions below:
+                - Identify bugs, security risks, and performance issues
+                - Check for deprecated methods and style guide violations
+                - Provide specific improvement suggestions based on the changes
+                - Respect developers' time and only make comments with a high confidence level, be mindful of the fact you don't have access to the full codebase
+                - Be concise and to the point, no more than 300 characters for the entire response
+                - Do not make suggestions about code that is not part of the PR diff
+                - If there is nothing obvious worth mentioning, please respond with 'LGTM!'
+                - Double check your response against these instructions before submitting", env.WEBHOOK_SITE_URL) | encode }}
