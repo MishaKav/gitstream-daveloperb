@@ -21,6 +21,8 @@ const autoDeploy = async (repo, pr, callback) => {
       return callback(null, 'skip on PR without `auto-deploy` label');
     }
 
+    console.log(`Misha Token: ${process.env.GITHUB_TOKEN}`);
+    console.log(`Misha Token Length: ${process.env.GITHUB_TOKEN?.length}`);
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
     await enableAutoMerge(octokit, repo, number);
