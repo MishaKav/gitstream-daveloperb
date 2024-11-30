@@ -15,3 +15,4 @@ automations:
       - action: custom-action@v1
         args:
           plugin: {{ repo | autoDeploy(pr) }}
+
