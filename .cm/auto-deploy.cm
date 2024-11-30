@@ -1,0 +1,18 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+triggers:
+  on:
+    - label_added
+
+automations:
+  auto_deploy:
+    if:
+      - {{ pr.labels | match(term='auto-deploy') | some }}
+    run:
+      - action: custom-action@v1
+        args:
+          plugin: {{ repo | autoDeploy(pr) }}
+
