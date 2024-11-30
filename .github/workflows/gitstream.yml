@@ -44,6 +44,7 @@ jobs:
         uses: linear-b/gitstream-github-action@v2-misha
         env:
           ENABLE_DEBUG_ARTIFACTS: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
           WEBHOOK_SITE_URL: ${{ secrets.WEBHOOK_SITE_URL }}
         with:
