@@ -37,6 +37,9 @@ const getClientPayload = () => {
  */
 const autoDeploy = async (repo, pr, callback) => {
   try {
+    console.log('misha1');
+    console.log(process.env.CLIENT_PAYLOAD);
+    console.log(JSON.parse(process.env.CLIENT_PAYLOAD));
     const { labels, checks, draft, author, number } = pr;
     const prNumber = Number(number);
 
