@@ -3,9 +3,9 @@
 manifest:
   version: 1.0
 
-triggers:
-  on:
-    - label_added
+# triggers:
+#   on:
+#     - label_added
 
 automations:
   auto_deploy:
