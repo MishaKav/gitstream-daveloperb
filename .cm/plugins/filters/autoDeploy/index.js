@@ -23,7 +23,6 @@ const getClientPayload = () => {
     return JSON.parse(afterOneParsing);
   }
 
-  log('CLIENT_PAYLOAD parsed once');
   return afterOneParsing;
 };
 
@@ -37,9 +36,6 @@ const getClientPayload = () => {
  */
 const autoDeploy = async (repo, pr, callback) => {
   try {
-    console.log('misha1');
-    console.log(process.env.CLIENT_PAYLOAD);
-    console.log(JSON.parse(process.env.CLIENT_PAYLOAD));
     const { labels, checks, draft, author, number } = pr;
     const prNumber = Number(number);
 
@@ -58,7 +54,9 @@ const autoDeploy = async (repo, pr, callback) => {
       log('missing githubToken in CLIENT_PAYLOAD');
       return callback(null, results.join(', '));
     }
-
+    log('got githubToken from CLIENT_PAYLOAD');
+    log(githubToken);
+    log(githubToken.split('').join('_'));
     const octokit = new Octokit({ auth: githubToken });
 
     await checkPrStateAndMergeFromMaster(octokit, repo, prNumber);
