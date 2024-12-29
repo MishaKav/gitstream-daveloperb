@@ -1,4 +1,4 @@
-checking metrics3
+checking metrics4
 # GitStream Playground:
 
 A new repository created for exploring and experimenting with the GitStream workflow.
