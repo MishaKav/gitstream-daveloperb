@@ -47,6 +47,7 @@ jobs:
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CODEOWNERS: ${{ secrets.GITSTREAM_CODEOWNERS }}
           WEBHOOK_SITE_URL: ${{ secrets.WEBHOOK_SITE_URL }}
+          OPEN_AI_GITSTREAM_REVIEWS_TOKEN: ${{ secrets.OPEN_AI_GITSTREAM_REVIEWS_TOKEN }}
         with:
           full_repository: ${{ github.event.inputs.full_repository }}
           head_ref: ${{ github.event.inputs.head_ref }}
