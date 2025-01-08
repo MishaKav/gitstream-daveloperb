@@ -124,17 +124,17 @@ const askLB = async (source, prompt, token, callback) => {
     return callback(null, message);
   }
 
-  const { RULES_RESOLVER_TOKEN } = getClientPayload();
-  if (!RULES_RESOLVER_TOKEN) {
-    console.log(`missing RULES_RESOLVER_TOKEN`);
-    return callback(null, 'missing RULES_RESOLVER_TOKEN');
-  }
+  // const { RULES_RESOLVER_TOKEN } = getClientPayload();
+  // if (!RULES_RESOLVER_TOKEN) {
+  //   console.log(`missing RULES_RESOLVER_TOKEN`);
+  //   return callback(null, 'missing RULES_RESOLVER_TOKEN');
+  // }
 
   const response = await fetch(ASK_LB_ENDPOINT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${RULES_RESOLVER_TOKEN}`
+      Authorization: `Bearer ${process.env.RULES_RESOLVER_TOKEN}`
     },
     body: JSON.stringify({
       model: 'gpt-4o-2024-08-06',
