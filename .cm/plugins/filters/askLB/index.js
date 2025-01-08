@@ -11,8 +11,6 @@
  * */
 
 const WORDS_LIMIT = 100000;
-const ASK_LB_ENDPOINT =
-  'https://yho0owet1b.execute-api.us-west-1.amazonaws.com/dev-01/api/v1/gitstream/ask_lb';
 const LOCK_FILES = [
   'package-lock.json',
   'yarn.lock',
@@ -113,11 +111,14 @@ const askLB = async (source, prompt, token, callback) => {
     return callback(null, message);
   }
 
-  const response = await fetch(ASK_LB_ENDPOINT, {
+  const { RULES_RESOLVER_TOKEN, RULES_RESOLVER_URL } = process.env;
+  const askLbEndpoint = RULES_RESOLVER_URL.replace('gitstream/resolve', 'gitstream/ask_lb');
+
+  const response = await fetch(askLbEndpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.RULES_RESOLVER_TOKEN}`
+      Authorization: `Bearer ${RULES_RESOLVER_TOKEN}`
     },
     body: JSON.stringify({ prompt, content: JSON.stringify(formattedContext) })
   });
