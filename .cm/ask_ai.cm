@@ -29,6 +29,7 @@ automations:
 
     ask_ai_describe_and_review:
       if:
+        - {{ false }}
         - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter(attr='content', regex=r/PR Summary/) | nope }}
         - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter(attr='content', regex=r/gitStream Review/) | nope }}
       run:
