@@ -1,6 +1,6 @@
-const { RULES_RESOLVER } = require('./data');
-const fs = require('fs');
-const path = require('path');
+// const { RULES_RESOLVER } = require('./data');
+// const fs = require('fs');
+// const path = require('path');
 
 /**
  * @module askLB
@@ -93,16 +93,14 @@ const convertFilesForContext = source => {
 const askLB = async (source, prompt, token, callback) => {
   const formattedContext = convertFilesForContext(source);
 
-  const filePath = path.join(__dirname, 'formattedContext.json');
-
-  // Write the formattedContext to the file
-  fs.writeFile(filePath, JSON.stringify(JSON.stringify(formattedContext), null, 2), err => {
-    if (err) {
-      console.error('Error writing formattedContext to file:', err);
-    } else {
-      console.log('formattedContext has been written to', filePath);
-    }
-  });
+  // const filePath = path.join(__dirname, 'formattedContext.json');
+  // fs.writeFile(filePath, JSON.stringify(JSON.stringify(formattedContext), null, 2), err => {
+  //   if (err) {
+  //     console.error('Error writing formattedContext to file:', err);
+  //   } else {
+  //     console.log('formattedContext has been written to', filePath);
+  //   }
+  // });
 
   if (!formattedContext?.length) {
     const message = `There are no context files to analyze.\nAll ${source?.diff?.files?.length} files were excluded by pattern.`;
