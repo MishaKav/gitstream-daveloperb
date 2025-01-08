@@ -14,8 +14,10 @@
  * @license MIT
  * */
 
-const WORDS_LIMIT = 25000;
+const WORDS_LIMIT = 50000;
 const OPEN_AI_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
+const ASK_LB_ENDPOINT =
+  'https://api.openai.com/v1/chat/https://yho0owet1b.execute-api.us-west-1.amazonaws.com/dev-01/api/v1/gitstream/ask_lb';
 const LOCK_FILES = [
   'package-lock.json',
   'yarn.lock',
@@ -57,6 +59,20 @@ const IGNORE_FILES_REGEX_LIST = [
   ...EXCLUDE_EXPRESSIONS_LIST
 ];
 const EXCLUDE_PATTERN = new RegExp(IGNORE_FILES_REGEX_LIST.join('|'));
+
+/**
+ * Get CLIENT_PAYLOAD from environment variables and parse it
+ * @returns {Object} - The client payload object
+ */
+const getClientPayload = () => {
+  const afterOneParsing = JSON.parse(process.env.CLIENT_PAYLOAD);
+
+  if (typeof afterOneParsing === 'string') {
+    return JSON.parse(afterOneParsing);
+  }
+
+  return afterOneParsing;
+};
 
 /**
  * @description Check if a file should be excluded from the context like "package-lock.json"
@@ -108,11 +124,17 @@ const askLB = async (source, prompt, token, callback) => {
     return callback(null, message);
   }
 
-  const response = await fetch(OPEN_AI_ENDPOINT, {
+  const { RULES_RESOLVER_TOKEN } = getClientPayload();
+  if (!RULES_RESOLVER_TOKEN) {
+    console.log(`missing RULES_RESOLVER_TOKEN`);
+    return callback(null, 'missing RULES_RESOLVER_TOKEN');
+  }
+
+  const response = await fetch(ASK_LB_ENDPOINT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${RULES_RESOLVER_TOKEN}`
     },
     body: JSON.stringify({
       model: 'gpt-4o-2024-08-06',
