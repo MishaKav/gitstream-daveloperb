@@ -5,3 +5,5 @@ A new repository created for exploring and experimenting with the GitStream work
 https://app.gitstream.cm/playground
 
 Let's try it out
+
+Trying now the new `askLB` filter
