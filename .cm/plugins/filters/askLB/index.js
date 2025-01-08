@@ -17,7 +17,7 @@
 const WORDS_LIMIT = 50000;
 const OPEN_AI_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 const ASK_LB_ENDPOINT =
-  'https://api.openai.com/v1/chat/https://yho0owet1b.execute-api.us-west-1.amazonaws.com/dev-01/api/v1/gitstream/ask_lb';
+  'https://yho0owet1b.execute-api.us-west-1.amazonaws.com/dev-01/api/v1/gitstream/ask_lb';
 const LOCK_FILES = [
   'package-lock.json',
   'yarn.lock',
