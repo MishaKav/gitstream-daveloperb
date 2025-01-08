@@ -1,7 +1,3 @@
-// const { RULES_RESOLVER } = require('./data');
-// const fs = require('fs');
-// const path = require('path');
-
 /**
  * @module askLB
  * @description A gitStream plugin to interact with AI models. Currently works with `ChatGPR-4o-mini`.
@@ -14,8 +10,7 @@
  * @license MIT
  * */
 
-const WORDS_LIMIT = 50000;
-const OPEN_AI_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
+const WORDS_LIMIT = 100000;
 const ASK_LB_ENDPOINT =
   'https://yho0owet1b.execute-api.us-west-1.amazonaws.com/dev-01/api/v1/gitstream/ask_lb';
 const LOCK_FILES = [
@@ -109,26 +104,11 @@ const convertFilesForContext = source => {
 const askLB = async (source, prompt, token, callback) => {
   const formattedContext = convertFilesForContext(source);
 
-  // const filePath = path.join(__dirname, 'formattedContext.json');
-  // fs.writeFile(filePath, JSON.stringify(JSON.stringify(formattedContext), null, 2), err => {
-  //   if (err) {
-  //     console.error('Error writing formattedContext to file:', err);
-  //   } else {
-  //     console.log('formattedContext has been written to', filePath);
-  //   }
-  // });
-
   if (!formattedContext?.length) {
     const message = `There are no context files to analyze.\nAll ${source?.diff?.files?.length} files were excluded by pattern.`;
     console.log(message);
     return callback(null, message);
   }
-
-  // const { RULES_RESOLVER_TOKEN } = getClientPayload();
-  // if (!RULES_RESOLVER_TOKEN) {
-  //   console.log(`missing RULES_RESOLVER_TOKEN`);
-  //   return callback(null, 'missing RULES_RESOLVER_TOKEN');
-  // }
 
   const response = await fetch(ASK_LB_ENDPOINT, {
     method: 'POST',
@@ -141,19 +121,20 @@ const askLB = async (source, prompt, token, callback) => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`Request failed with status ${response.status}: ${errorText}`);
+    const message = `Request failed with status ${response.status}: ${errorText}`;
+    console.error(message);
+    return callback(null, message);
   }
 
   const data = await response.json();
+  const { statusCode, message } = data || {};
 
-  if (data?.statusCode !== 200) {
-    console.error(data?.message);
-    return callback(null, data?.message);
+  if (statusCode !== 200) {
+    console.error(message);
+    return callback(null, message);
   }
 
-  const suggestion = data.message ?? 'Error';
-
-  return callback(null, suggestion);
+  return callback(null, message);
 };
 
 module.exports = {
