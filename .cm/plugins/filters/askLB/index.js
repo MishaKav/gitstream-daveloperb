@@ -136,32 +136,22 @@ const askLB = async (source, prompt, token, callback) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.RULES_RESOLVER_TOKEN}`
     },
-    body: JSON.stringify({
-      model: 'gpt-4o-2024-08-06',
-      messages: [
-        {
-          role: 'system',
-          content: `You are a code reviewer. Answer only to the request, without any introductory or conclusion text.`
-        },
-        {
-          role: 'user',
-          content: JSON.stringify(formattedContext)
-        },
-        { role: 'user', content: prompt }
-      ]
-    })
+    body: JSON.stringify({ prompt, content: JSON.stringify(formattedContext) })
   });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Request failed with status ${response.status}: ${errorText}`);
+  }
 
   const data = await response.json();
 
-  if (data?.error?.message) {
-    console.error(data.error.message);
-    return callback(null, data.error.message);
+  if (data?.statusCode !== 200) {
+    console.error(data?.message);
+    return callback(null, data?.message);
   }
 
-  const suggestion =
-    data.choices?.[0]?.message?.content ??
-    'context was too big for api, try with smaller context object';
+  const suggestion = data.message ?? 'Error';
 
   return callback(null, suggestion);
 };
