@@ -91,7 +91,10 @@ const shouldIncludeFile = fileObject => {
 };
 
 const convertFilesForContext = source => {
-  const files = source.diff?.files.filter(shouldIncludeFile);
+  const files = source.diff?.files.filter(shouldIncludeFile).map(file => {
+    const { original_file, diff } = file;
+    return { original_file, diff };
+  });
   const words = JSON.stringify(files).split(' ').length;
 
   if (WORDS_LIMIT > words) {
