@@ -4,7 +4,7 @@ manifest:
   version: 1.0
 
 automations:
-  pr_description_by_ask_lb:
+  pr_description_by_linearb_ai:
     if:
       - true
     run:
@@ -13,8 +13,8 @@ automations:
           concat_mode: replace
           description: |
             ___
-            ### PR Description by askLB('Describe PR')
-            {{ source | askLB(PR_DESCRIPTION_PROMT, env.OPEN_AI_GITSTREAM_REVIEWS_TOKEN) }}
+            ### PR Description by LinearB_AI('Describe PR')
+            {{ source | LinearB_AI(promt=PR_DESCRIPTION_PROMT) }}
 
 PR_DESCRIPTION_PROMT: |
   Analyze this PR and provide a concise summary in the following format:
