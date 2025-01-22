@@ -6,13 +6,13 @@ manifest:
 automations:
   pr_description_by_linearb_ai:
     if:
-      - true
+      - pr_creared
+      - commit
     run:
       - action: update-description@v1
         args:
           concat_mode: append
-          description: |
-            {{ source | AI_DescribePR }}
+          description: {{ source | AI_DescribePR }}
 
 PR_DESCRIPTION_PROMT: |
   Analyze this PR and provide a concise summary in the following format:
