@@ -10,11 +10,9 @@ automations:
     run:
       - action: update-description@v1
         args:
-          concat_mode: replace
+          concat_mode: append
           description: |
-            ___
-            ### PR Description by LinearB_AI('Describe PR')
-            {{ source | LinearB_AI(prompt=PR_DESCRIPTION_PROMT) }}
+            {{ source | AI_DescribePR }}
 
 PR_DESCRIPTION_PROMT: |
   Analyze this PR and provide a concise summary in the following format:
