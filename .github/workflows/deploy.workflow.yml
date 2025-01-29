@@ -23,8 +23,8 @@ jobs:
         env:
           MSG_MINIMAL: true
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_TITLE: ${{ github.repository }}
+          SLACK_TITLE: gitstream-rules-resolver
           SLACK_FOOTER: <${{ env.WORKFLOW_RUN_URL }}|workflow run> | <${{ env.TAG_URL }}|${{ github.ref_name }}>
           SLACK_MESSAGE: |
-            Deployed `${{ github.ref_name }}` to `dev-01`
-            some custom text for second line
+            Deployed `1.0.2` to `prod`
+            Linbee-13969 rules resolver create auto deployment workflow 2 by @MishaKav in \n feat(lambda): increase memory size for jwtAuthorizer function to 128 MB by @MishaKav
