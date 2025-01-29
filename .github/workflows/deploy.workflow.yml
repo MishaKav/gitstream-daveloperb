@@ -23,7 +23,7 @@ jobs:
         env:
           MSG_MINIMAL: true
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_TITLE: gitstream-rules-resolver
+          SLACK_TITLE: ${{ github.repository }}
           SLACK_FOOTER: <${{ env.WORKFLOW_RUN_URL }}|workflow run> | <${{ env.TAG_URL }}|${{ github.ref_name }}>
           SLACK_MESSAGE: |
             Deployed `${{ github.ref_name }}` to `dev-01`
