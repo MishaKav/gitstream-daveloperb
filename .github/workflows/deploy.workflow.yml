@@ -11,13 +11,15 @@ jobs:
   deploy-to-env:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
       - name: Success Slack Notification
         if: success()
         uses: rtCamp/action-slack-notify@v2
         env:
           MSG_MINIMAL: true
+          SLACK_TITLE: ''
+          SLACK_FOOTER: ''
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_MESSAGE: |
             *MishaKav* - Testing `${{ github.ref_name }}` to `${{ inputs.env }}`
