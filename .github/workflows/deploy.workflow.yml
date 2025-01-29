@@ -18,9 +18,9 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           MSG_MINIMAL: true
-          SLACK_TITLE: ''
-          SLACK_FOOTER: ''
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_TITLE: gitstream-rules-resolver
+          SLACK_FOOTER: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           SLACK_MESSAGE: |
             *MishaKav* - Testing `${{ github.ref_name }}` to `${{ inputs.env }}`
             some custom text for second line
