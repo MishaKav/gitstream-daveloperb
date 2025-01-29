@@ -20,7 +20,7 @@ jobs:
           MSG_MINIMAL: true
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_TITLE: gitstream-rules-resolver
-          SLACK_FOOTER: '<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}| #${{ github.run_id }}>'
+          SLACK_FOOTER: '<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> | <${{ github.server_url }}/${{ github.repository }}/tree/${{ github.ref_name }}|${{ github.ref_name }}>'
           SLACK_MESSAGE: |
             Deployed `${{ github.ref_name }}` to `dev-01`
             some custom text for second line
