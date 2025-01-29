@@ -21,7 +21,7 @@ jobs:
         if: success()
         uses: rtCamp/action-slack-notify@v2
         env:
-          # MSG_MINIMAL: true
+          MSG_MINIMAL: true
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_TITLE: gitstream-rules-resolver
           SLACK_FOOTER: <${{ env.WORKFLOW_RUN_URL }}|workflow run> | <${{ env.TAG_URL }}|${{ github.ref_name }}>
