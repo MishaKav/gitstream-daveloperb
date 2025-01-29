@@ -1,32 +1,24 @@
-name: gitStream deployments
-run-name: gitStream deployment `${{ github.ref_name }}` to `${{ inputs.env }}`
+name: check action-slack-notify
 
 on:
-  repository_dispatch:
-    types: [deploy]
+  push:
+    branches:
+      - action-slack-notify
 
   workflow_dispatch:
-    inputs:
-      env:
-        type: choice
-        required: true
-        description: the env you want to deploy to
-        options:
-          - dev-01
-          - prod
-
-concurrency:
-  group: deploy_${{ inputs.env }}
-  cancel-in-progress: false
 
 jobs:
   deploy-to-env:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run CLI
-        run: |
-          echo "Deploying to ${{ inputs.env }}"
-          echo "Running CLI command"
-          echo "gitStream deploy --env ${{ inputs.env }} --tag ${{ github.ref_name }}"
+      - name: Success Slack Notification
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          MSG_MINIMAL: true
+          SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: |
+            *MishaKav* - Testing `${{ github.ref_name }}` to `${{ inputs.env }}`
+            some custom text for second line
