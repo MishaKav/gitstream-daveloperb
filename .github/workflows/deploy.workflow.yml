@@ -2,9 +2,6 @@ name: check action-slack-notify
 
 on:
   push:
-    branches:
-      - action-slack-notify
-
   workflow_dispatch:
 
 env:
