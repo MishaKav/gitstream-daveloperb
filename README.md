@@ -37,21 +37,7 @@ To get started with GitStream, follow these steps:
 
 ## Documentation
 
-For detailed documentation and examples, visit the [GitStream Documentation](https://docs.gitstream.cm).
-
-## Contributing
-
-We welcome contributions! Please read our Contributing Guidelines to get started.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-## Contact
-
-For any questions or feedback, please reach out to us at [support@gitstream.cm](mailto:support@gitstream.cm).
-
----
+## For detailed documentation and examples, visit the [GitStream Documentation](https://docs.gitstream.cm).
 
 Let's try it out and see the magic of GitStream in action!
 
