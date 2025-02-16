@@ -1,0 +1,22 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  pr_description_by_linearb_ai:
+    if:
+      - true
+    on:
+      - pr_created
+      - commit
+    run:
+      - action: update-description@v1
+        args:
+          concat_mode: append
+          description: {{ source | AI_DescribePR }}
+
+PR_DESCRIPTION_PROMT: |
+  Analyze this PR and provide a concise summary in the following format:
+  - Summarize the main changes in this PR in 1-3 brief bullet points (max 15 words each).
+  - Clearly state the purpose and impact of these changes in 1 sentence

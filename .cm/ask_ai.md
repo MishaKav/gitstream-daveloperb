@@ -1,0 +1,66 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+    describe_pr_title:
+      if:
+        - {{ pr.labels | match(term="askai") | some }}
+      run:
+        - action: update-title@v1
+          args:
+            concat_mode: replace
+            title: |
+              {{ source | testingRequest("some title", env.WEBHOOK_SITE_URL) | encode }}
+
+    describe_pr_description:
+      if:
+        - {{ pr.labels | match(term="askai") | some }}
+      run:
+        - action: update-description@v1
+          args:
+            concat_mode: append
+            description: |
+              # 📜 PR Summary 📜
+              {{ source | testingRequest("
+                Summarize the changes in this PR using bullet points.", env.WEBHOOK_SITE_URL) | encode }}
+
+
+    ask_ai_describe_and_review:
+      if:
+        - {{ false }}
+        - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter(attr='content', regex=r/PR Summary/) | nope }}
+        - {{ pr.comments | filter(attr='commenter', term='gitstream-cm') | filter(attr='content', regex=r/gitStream Review/) | nope }}
+      run:
+        - action: add-label@v1
+          args:
+            label: "ask-ai-describe-and-review"
+        - action: add-comment@v1
+          args:
+            comment: |
+              {{ source | testingRequest("
+                Use the following template (between the ---) to format your response (do not include the ---). The {prSummary} and {codeReview} placeholders are defined beneath and each should be formatted using Gitlab Flavored Markdown. Do not include any preamble or commentary, stick strictly to the template (including the trailing new line).
+
+                ---
+                # 📜 PR Summary 📜
+                {prSummary}
+
+                # ✨ Code Review ✨
+                {codeReview}
+
+                ---
+
+                For {prSummary}:
+                Summarize the changes in this PR in bullet points. Keep the response concise and to the point, no more than 300 characters.
+                
+                For {codeReview}:
+                Review the PR code diff and follow the instructions below:
+                - Identify bugs, security risks, and performance issues
+                - Check for deprecated methods and style guide violations
+                - Provide specific improvement suggestions based on the changes
+                - Respect developers' time and only make comments with a high confidence level, be mindful of the fact you don't have access to the full codebase
+                - Be concise and to the point, no more than 300 characters for the entire response
+                - Do not make suggestions about code that is not part of the PR diff
+                - If there is nothing obvious worth mentioning, please respond with 'LGTM!'
+                - Double check your response against these instructions before submitting", env.WEBHOOK_SITE_URL) | encode }}

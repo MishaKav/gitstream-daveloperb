@@ -1,0 +1,11 @@
+# -*- mode: yaml -*-
+
+manifest:
+  version: 1.0
+
+automations:
+  pr_review_by_linearb_ai:
+    if:
+      - true
+    run:
+      - action: code-review@v1
