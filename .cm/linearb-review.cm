@@ -6,9 +6,8 @@ manifest:
 automations:
   pr_review_by_linearb_ai:
     if:
-      - {{ pr.title | includes(term="review") }}
+      - { { pr.title | includes(term="review") } }
     run:
       - action: code-review@v1
         args:
           approve_on_LGTM: true
-          
