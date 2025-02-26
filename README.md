@@ -56,3 +56,7 @@ For any questions or feedback, please reach out to us at [support@gitstream.cm](
 Let's try it out and see the magic of GitStream in action!
 
 [GitStream Playground](https://app.gitstream.cm/playground)
+=======
+A new repository was created for exploring and experimenting with the GitStream workflow.
+
+https://app.gitstream.cm/playground
