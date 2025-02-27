@@ -3,6 +3,12 @@ manifest:
   version: 1.0
 
 automations:
+  approve_tests:
+    if:
+      - {{ pr.title | includes(term="approve") }}
+    run: 
+      - action: approve@v1
+
   estimated_time_to_review:
     if:
       - true
