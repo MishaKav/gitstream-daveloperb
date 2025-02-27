@@ -8,6 +8,9 @@ automations:
       - {{ pr.title | includes(term="approve") }}
     run: 
       - action: approve@v1
+      - action: add-comment@v1
+        args:
+          comment: Approved PR by gitstream
 
   estimated_time_to_review:
     if:
