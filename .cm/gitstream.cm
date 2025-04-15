@@ -10,7 +10,7 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            {{ repo | getOrgAdmins() | join(",") }}
+            {{ repo | getOrgAdmins() | dump }}
 
   approve_tests:
     if:
