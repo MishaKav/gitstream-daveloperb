@@ -44,7 +44,7 @@ automations:
           color:
             {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
 
-ADMINS_INFO: {{ repo | getOrgAdminsTest(pr.reviewers) }}
+ADMINS_INFO: {{ repo | getOrgAdminsTest(pr.reviewers) | dump }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
