@@ -18,6 +18,8 @@ automations:
             some {{ pr.reviewers | match(list=ORG_ADMINS) | some }}
             ORG_ADMINS_DUMP {{ pr.reviewers | match(list=ORG_ADMINS_DUMP) | nope }}
             ORG_ADMINS_LIST {{ pr.reviewers | match(list=ORG_ADMINS_LIST) | nope }}
+            intersection nope {{ pr.reviewers | intersection(list=ORG_ADMINS) | nope }}
+            intersection some {{ pr.reviewers | intersection(list=ORG_ADMINS) | some }}
 
   list_org_admins:
     if:
