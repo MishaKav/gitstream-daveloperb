@@ -38,11 +38,13 @@ const getOrgAdmins = async (repo, callback) => {
 
     const octokit = new Octokit({ auth: githubToken });
 
-    const owners = await octokit.paginate(octokit.orgs.listMembers, {
+    const { data: owners } = await octokit.request('GET /orgs/{org}/members', {
+      headers: { 'X-GitHub-Api-Version': '2022-11-28' },
       org: repo.owner,
       role: 'admin',
       per_page: 100
     });
+
     const results = owners.map(owner => owner.login);
 
     return callback(null, results);
