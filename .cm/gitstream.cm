@@ -3,10 +3,19 @@ manifest:
   version: 1.0
 
 automations:
+  list_org_admins:
+    if:
+      - {{ pr.title | includes(term="admins") }}
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ repo | getOrgAdmins() | join(",") }}
+
   approve_tests:
     if:
       - {{ pr.title | includes(term="approve") }}
-    run: 
+    run:
       - action: approve@v1
       - action: add-comment@v1
         args:
@@ -18,8 +27,9 @@ automations:
     run:
       - action: add-label@v1
         args:
-          label: "{{ calc.etr }} min review"
-          color: {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
+          label: '{{ calc.etr }} min review'
+          color:
+            {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
