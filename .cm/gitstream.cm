@@ -14,6 +14,8 @@ automations:
             pr.reviewers {{ pr.reviewers }}
             nope {{ pr.reviewers | match(list=ORG_ADMINS) | nope }}
             some {{ pr.reviewers | match(list=ORG_ADMINS) | some }}
+            ORG_ADMINS_DUMP {{ pr.reviewers | match(list=ORG_ADMINS_DUMP) | nope }}
+            ORG_ADMINS_LIST {{ pr.reviewers | match(list=ORG_ADMINS_LIST) | nope }}
 
   list_org_admins:
     if:
@@ -45,6 +47,8 @@ automations:
             {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
 
 ORG_ADMINS: {{ repo | getOrgAdminsTest() }}
+ORG_ADMINS_DUMP: {{ repo | getOrgAdminsTest() | dump }}
+ORG_ADMINS_LIST: {{ repo | getOrgAdminsTest() | list }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
