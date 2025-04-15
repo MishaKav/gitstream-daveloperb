@@ -3,8 +3,19 @@ manifest:
   version: 1.0
 
 automations:
+  list_org_admins_test:
+    if:
+      - {{ pr.title | includes(term="admins-test") }}
+    run:
+      - action: add-comment@v1
+        args:
+          comment: |
+            {{ ORG_ADMINS }}
+            {{ pr.reviewers | match(list=ORG_ADMINS) | nope }}
+
   list_org_admins:
     if:
+      - {{ false }}
       - {{ pr.title | includes(term="admins") }}
     run:
       - action: add-comment@v1
@@ -30,6 +41,8 @@ automations:
           label: '{{ calc.etr }} min review'
           color:
             {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
+
+ORG_ADMINS: {{ repo | getOrgAdminsTest() }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
