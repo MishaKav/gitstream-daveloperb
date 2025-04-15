@@ -53,6 +53,11 @@ ORG_ADMINS: {{ repo | getOrgAdminsTest() }}
 ORG_ADMINS_DUMP: {{ repo | getOrgAdminsTest() | dump }}
 ORG_ADMINS_LIST: {{ repo | getOrgAdminsTest() | list }}
 
+
+includes1: {{ pr.reviewers | intersection(list=ORG_ADMINS) | length > 0 }}
+includes2: {{ pr.reviewers | intersection(list=ORG_ADMINS_DUMP) | length > 0 }}
+includes3: {{ pr.reviewers | intersection(list=ORG_ADMINS_LIST) | length > 0 }}
+
 calc:
   etr: {{ branch | estimatedReviewTime }}
 
