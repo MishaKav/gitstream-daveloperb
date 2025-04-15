@@ -10,8 +10,10 @@ automations:
       - action: add-comment@v1
         args:
           comment: |
-            {{ ORG_ADMINS }}
-            {{ pr.reviewers | match(list=ORG_ADMINS) | nope }}
+            ORG_ADMINS {{ ORG_ADMINS }}
+            pr.reviewers {{ pr.reviewers }}
+            nope {{ pr.reviewers | match(list=ORG_ADMINS) | nope }}
+            some {{ pr.reviewers | match(list=ORG_ADMINS) | some }}
 
   list_org_admins:
     if:
