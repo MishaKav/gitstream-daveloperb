@@ -11,6 +11,8 @@ automations:
         args:
           comment: |
             ORG_ADMINS {{ ORG_ADMINS }}
+            ORG_ADMINS_DUMP {{ ORG_ADMINS_DUMP }}
+            ORG_ADMINS_LIST {{ ORG_ADMINS_LIST }}
             pr.reviewers {{ pr.reviewers }}
             nope {{ pr.reviewers | match(list=ORG_ADMINS) | nope }}
             some {{ pr.reviewers | match(list=ORG_ADMINS) | some }}
