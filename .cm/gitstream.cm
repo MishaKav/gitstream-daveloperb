@@ -3,28 +3,6 @@ manifest:
   version: 1.0
 
 automations:
-  list_org_admins_test:
-    if:
-      - {{ pr.title | includes(term="admins-test") }}
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            ADMINS_INFO {{ ADMINS_INFO }}
-            ADMINS_INFO dump {{ ADMINS_INFO | dump }}
-            ADMINS_INFO.ADMINS {{ ADMINS_INFO.ADMINS }}
-            ADMINS_INFO.HAS_ADMIN_APPROVAL {{ ADMINS_INFO.HAS_ADMIN_APPROVAL }}
-
-  list_org_admins:
-    if:
-      - {{ false }}
-      - {{ pr.title | includes(term="admins") }}
-    run:
-      - action: add-comment@v1
-        args:
-          comment: |
-            {{ repo | getOrgAdmins() | dump }}
-
   approve_tests:
     if:
       - {{ pr.title | includes(term="approve") }}
@@ -43,8 +21,6 @@ automations:
           label: '{{ calc.etr }} min review'
           color:
             {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
-
-ADMINS_INFO: {{ repo | getOrgAdminsTest(pr.reviewers) | dump }}
 
 calc:
   etr: {{ branch | estimatedReviewTime }}
