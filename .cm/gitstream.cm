@@ -47,6 +47,35 @@ automations:
           description: |
             https://linearb.atlassian.net/browse/{{ jira_ticket_from_title }}
 
+  core_change:
+    on:
+      - pr_created
+      - pr_ready_for_review
+      - commit
+    if:
+      - {{ not pr.draft }}
+      - {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | nope }}
+      - {{ files | match(regex=r/libs\/core\/src\/.*/) | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [EladKohavi]
+      - action: add-comment@v1
+        args:
+          comment: "The Core team has been added to this PR for visibility because gitstream has detected changes to libs/core"
+      - action: add-label@v1
+        args:
+          label: "core-change"
+          color: '5319e7'
+      # - action: code-review@v1
+      #   args:
+      #     approve_on_LGTM: false
+      #     guidelines: {{ REVIEW_GUIDE | dump }}
+      # - action: describe-changes@v1
+      #   args:
+      #     guidelines: {{ PR_DESCRIBE_GUIDE | dump }}
+      #     concat_mode: append
+
   core_review_test:
     if:
       - {{ pr.labels | match(term="ai-review-test") | some }}
