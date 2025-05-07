@@ -1,0 +1,128 @@
+# -*- mode: yaml -*-
+manifest:
+  version: 1.0
+
+config:
+  ignore_files:
+    - 'yarn.lock'
+    - 'package-lock.json'
+
+automations:
+  estimated_time_to_review:
+    if:
+      - true
+    run:
+      - action: add-label@v1
+      # etr is defined in the calc section below
+        args:
+          label: "{{ calc.etr }} min review"
+          color: {{ colour.red if (calc.etr >= 20) else ( colour.yellow if (calc.etr >= 5) else colour.green ) }}
+
+  explain_code_experts:
+    if:
+      - true
+    run:
+      - action: explain-code-experts@v1
+        args:
+          gt: 10
+
+  label_missing_jira_info:
+    # Triggered for PRs that don't have either a Jira ticket number in the title,
+    # or a link to a Jira ticket in the PR description.
+    if:
+      - {{ not pr.draft and (not (has.jira_ticket_in_title or has.jira_ticket_in_desc)) }}
+    run:
+      - action: add-label@v1
+        args:
+          label: "missing-jira"
+          color: 'd93f0b'
+
+  link_jira_ticket:
+    if:
+      - {{ not pr.draft and (has.jira_ticket_in_title and (not has.jira_ticket_in_desc)) }}
+    run:
+      - action: update-description@v1
+        args:
+          concat_mode: prepend
+          description: |
+            https://linearb.atlassian.net/browse/{{ jira_ticket_from_title }}
+
+  core_change:
+    on:
+      - pr_created
+      - pr_ready_for_review
+      - commit
+    if:
+      - {{ not pr.draft }}
+      - {{ pr.author | match(list=['github-actions', 'dependabot', '[bot]']) | nope }}
+      - {{ files | match(regex=r/libs\/core\/src\/.*/) | some }}
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [EladKohavi]
+      - action: add-comment@v1
+        args:
+          comment: "The Core team has been added to this PR for visibility because gitstream has detected changes to libs/core"
+      - action: add-label@v1
+        args:
+          label: "core-change"
+          color: '5319e7'
+      # - action: code-review@v1
+      #   args:
+      #     approve_on_LGTM: false
+      #     guidelines: {{ REVIEW_GUIDE | dump }}
+      # - action: describe-changes@v1
+      #   args:
+      #     guidelines: {{ PR_DESCRIBE_GUIDE | dump }}
+      #     concat_mode: append
+
+  core_review_test:
+    if:
+      - {{ pr.labels | match(term="ai-review-test") | some }}
+    run:
+      - action: code-review@v1
+        args:
+          approve_on_LGTM: false
+          guidelines: {{ REVIEW_GUIDE | dump }}
+
+  describe_pr_test:
+    if: 
+      - {{ pr.labels | match(term="ai-review-test") | some }}
+    run:
+      - action: describe-changes@v1
+        args:
+          guidelines: {{ PR_DESCRIBE_GUIDE | dump }}
+          concat_mode: append
+
+# These functions are available in the automation above
+calc:
+  etr: {{ branch | estimatedReviewTime }}
+
+has:
+  deleted_files: {{ source.diff.files | map(attr='new_file') | match(term='/dev/null') | some }}
+  jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
+  jira_ticket_in_desc: {{ pr.description | includes(regex=r/atlassian.net\/browse\/\w{1,}-\d{3,4}/) }}
+
+jira_ticket_from_title: {{ pr.title | capture(regex=r/\b[A-Za-z]+-\d+\b/) }}
+
+# These are all of the colours in GitHub's default label colour palette
+colour:
+  red: 'b60205'
+  orange: 'd93f0b'
+  yellow: 'fbca04'
+  green: '0e8a16'
+  blue: '1d76db'
+  purple: '5319e7'
+
+REVIEW_GUIDE: |
+  - Focus only on identifying problems or opportunities for improvement. Do not comment on practices that are implemented correctly.
+  - Identify issues or problems related to incorrect use of React or Redux, such as the use of business logic inside hooks, improper state management with Redux or Redux Sagas, or lifecycle method issues if they cause a problem.
+  - Identify any issues with the implementation of business logic, including: inconsistent or inefficient logic handling, error handling and edge cases not covered, or unnecessary complexity or unclear code flow.
+  - Identify any issues with TypeScript usage, such as: incorrect or missing types, use of `any` where more specific types should be used, type mismatches or unsafe type assertions, misuse of TypeScript features like interfaces, types, or generics, or type inference that could lead to runtime errors.
+  - Highlight significant performance issues, such as unnecessary React re-renders or React Native performance concerns.
+  - Based on the provided test file names, confirm that tests have been added or updated appropriately.
+  - Suggest any critical test cases that are missing for new or changed functionality.
+
+PR_DESCRIBE_GUIDE: |
+  - Provide a concise, bulleted list summarizing the main changes in this PR.
+  - Highlight the purpose and impact of these changes.
