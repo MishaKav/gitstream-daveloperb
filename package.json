@@ -5,13 +5,14 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
+    "axios": "^0.2.2",
     "before-after-hook": "^2.2.3",
     "deprecation": "^2.3.1",
     "once": "^1.4.0",
+    "serialize-javascript": "^6.0.1",
     "universal-user-agent": "^6.0.1",
     "wrappy": "^1.0.2"
   },
-  "devDependencies": {},
   "scripts": {
     "create-tag": "./scripts/tag-version-and-public.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
