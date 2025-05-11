@@ -9,7 +9,9 @@
 
 module.exports = desc => {
   if (desc && desc !== '""' && desc !== "''") {
-    const matches = /Bumps.*from ([\d\.]+[A-Za-zαß]*) to ([\d\.]+[A-Za-zαß]*)/.exec(desc);
+    const parsedDesc = JSON.parse(desc);
+    const matches = /Bumps.*from ([\d\.]+[A-Za-zαß]*) to ([\d\.]+[A-Za-zαß]*)/.exec(parsedDesc);
+
     if (matches && matches.length == 3) {
       var [_, from, to] = matches;
       // remove trailing dot on to
