@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
-    "axios": "^0.2.2",
+    "axios": "^1.9.0",
     "before-after-hook": "^3.0.0",
     "deprecation": "^2.3.1",
     "once": "^1.4.0",
