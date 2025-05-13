@@ -6,7 +6,7 @@
   "type": "module",
   "dependencies": {
     "axios": "^1.9.0",
-    "before-after-hook": "^3.0.0",
+    "before-after-hook": "^4.0.0",
     "deprecation": "^2.3.1",
     "once": "^1.4.0",
     "serialize-javascript": "^6.0.2",
