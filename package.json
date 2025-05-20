@@ -9,7 +9,7 @@
     "before-after-hook": "^1.0.0",
     "deprecation": "^2.1.1",
     "once": "^1.4.0",
-    "serialize-javascript": "^5.0.1",
+    "serialize-javascript": "^6.0.2",
     "universal-user-agent": "^4.0.1",
     "wrappy": "^1.0.2"
   },
