@@ -5,11 +5,11 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
-    "axios": "^1.9.0",
+    "axios": "^0.2.0",
     "before-after-hook": "^4.0.0",
     "deprecation": "^2.3.1",
     "once": "^1.4.0",
-    "serialize-javascript": "^6.0.2",
+    "serialize-javascript": "^6.0.1",
     "universal-user-agent": "^7.0.0",
     "wrappy": "^1.0.2"
   },

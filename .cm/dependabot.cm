@@ -13,6 +13,9 @@ triggers:
 
 automations:
   bump_major:
+    on:
+      - pr_created
+      - commit
     if:
       - {{ bump == 'major' }}
       - {{ branch.name | includes(term="dependabot") }}
@@ -29,6 +32,9 @@ automations:
             Dependabot `major` version bumps are approved and merged automatically.
 
   bump_minor:
+    on:
+      - pr_created
+      - commit
     if:
       - {{ bump == 'minor' }}
       - {{ branch.name | includes(term="dependabot") }}
@@ -45,6 +51,9 @@ automations:
             Dependabot `minor` version bumps are approved and merged automatically.
 
   bump_patch:
+    on:
+      - pr_created
+      - commit
     if:
       - {{ bump == 'patch' }}
       - {{ branch.name | includes(term="dependabot") }}
