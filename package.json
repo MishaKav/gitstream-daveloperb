@@ -5,13 +5,13 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
-    "axios": "^1.9.0",
-    "before-after-hook": "^4.0.0",
+    "axios": "^0.2.0",
+    "before-after-hook": "^1.0.0",
     "deprecation": "^2.1.1",
     "once": "^1.4.0",
-    "serialize-javascript": "^6.0.2",
+    "serialize-javascript": "^5.0.1",
     "universal-user-agent": "^4.0.1",
-    "wrappy": "^1.0.2"
+    "wrappy": "^1.0.0"
   },
   "scripts": {
     "create-tag": "./scripts/tag-version-and-public.sh",
