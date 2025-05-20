@@ -12,23 +12,58 @@ triggers:
       - gitstream-daveloperb
 
 automations:
+  bump_major:
+    on:
+      - pr_created
+      - commit
+    if:
+      - {{ bump == 'major' }}
+      - {{ branch.name | includes(term="dependabot") }}
+      - {{ branch.author | includes(term="dependabot") }}
+    run:
+      - action: approve@v1
+      - action: merge@v1
+        args:
+          wait_for_all_checks: true
+          squash_on_merge: true
+      - action: add-comment@v1
+        args:
+          comment: |
+            Dependabot `major` version bumps are approved and merged automatically.
+
   bump_minor:
+    on:
+      - pr_created
+      - commit
     if:
       - {{ bump == 'minor' }}
       - {{ branch.name | includes(term="dependabot") }}
       - {{ branch.author | includes(term="dependabot") }}
     run:
+      - action: approve@v1
+      - action: merge@v1
+        args:
+          wait_for_all_checks: true
+          squash_on_merge: true
       - action: add-comment@v1
         args:
           comment: |
-            Dependabot `minor` version bumps are approved automatically.
+            Dependabot `minor` version bumps are approved and merged automatically.
 
   bump_patch:
+    on:
+      - pr_created
+      - commit
     if:
       - {{ bump == 'patch' }}
       - {{ branch.name | includes(term="dependabot") }}
       - {{ branch.author | includes(term="dependabot") }}
     run:
+      - action: approve@v1
+      - action: merge@v1
+        args:
+          wait_for_all_checks: true
+          squash_on_merge: true
       - action: add-comment@v1
         args:
           comment: |
