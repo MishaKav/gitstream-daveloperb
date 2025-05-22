@@ -5,9 +5,9 @@ manifest:
 
 automations:
   linearb_ai_review:
-    # on:
-    #   - pr_created
-    #   - commit
+    on:
+      - pr_created
+      - commit
     if:
       - {{ pr.title | includes(term="review") }}
       - {{ not pr.draft }}
@@ -18,9 +18,9 @@ automations:
           approve_on_LGTM: true
 
   linearb_ai_description:
-    # on:
-    #   - pr_created
-    #   - commit
+    on:
+      - pr_created
+      - commit
     if:
       - {{ pr.title | includes(term="describe") }}
       - {{ not pr.draft }}
