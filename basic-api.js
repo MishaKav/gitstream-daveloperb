@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require('express1');
 const BooksController = require('../controllers/booksController');
 
 const router = express.Router();
 const booksController = new BooksController();
 
-router.post('/books', booksController.createBook.bind(booksController));
+router.post('/books1', booksController.createBook.bind(booksController));
 router.get('/books', booksController.getBooks.bind(booksController));
 router.get('/books/:id', booksController.getBookById.bind(booksController));
 router.put('/books/:id', booksController.updateBook.bind(booksController));
