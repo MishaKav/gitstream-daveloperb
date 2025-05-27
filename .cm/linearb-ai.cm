@@ -18,9 +18,9 @@ automations:
           approve_on_LGTM: true
 
   linearb_ai_description:
-    # on:
-    #   - pr_created
-    #   - commit
+    on:
+      - pr_created
+      - commit
     if:
       - {{ pr.title | includes(term="describe") }}
       - {{ not pr.draft }}

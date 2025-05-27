@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        item: [1, 2, 3]
+        item: [1, 2]
 
     steps:
       - name: Wait for ${{ matrix.item }} seconds
         run: |
-          echo "Waiting for ${{ matrix.item }} seconds..."
-          sleep 0
+          echo "Waiting for 120 seconds for matrix ${{ matrix.item }}..."
+          sleep 120
           echo "Wait ${{ matrix.item }} completed!"

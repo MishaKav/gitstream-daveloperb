@@ -1,4 +1,4 @@
-# GitStream Playground:
+# gitstream-daveloperb
 
 A new repository was created for exploring and experimenting with the GitStream workflow.
 

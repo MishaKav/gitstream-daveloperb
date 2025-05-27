@@ -2,7 +2,7 @@
 
 name: gitStream workflow automation
 run-name: |
-  /:\ gitStream: PR #${{ fromJSON(fromJSON(github.event.inputs.client_payload)).pullRequestNumber }}
+  /:\ gitStream: PR #${{ fromJSON(fromJSON(github.event.inputs.client_payload)).pullRequestNumber }} from ${{ fromJSON(fromJSON(inputs.client_payload)).repo }} `${{ fromJSON(fromJSON(inputs.client_payload)).webhookEventName }}`
 
 on:
   workflow_dispatch:
@@ -38,7 +38,7 @@ jobs:
     steps:
       - name: Adding PR Url
         run: |
-          echo '[${{ fromJSON(fromJSON(inputs.client_payload)).repo }}#${{ fromJSON(fromJSON(inputs.client_payload)).prContext.number }}](${{ fromJSON(fromJSON(inputs.client_payload)).prContext.url }}) - `${{ fromJSON(fromJSON(inputs.client_payload)).branch }}` by ${{ fromJSON(fromJSON(inputs.client_payload)).prContext.author }}' >> $GITHUB_STEP_SUMMARY
+          echo '[${{ fromJSON(fromJSON(inputs.client_payload)).repo }}#${{ fromJSON(fromJSON(inputs.client_payload)).prContext.number }}](${{ fromJSON(fromJSON(inputs.client_payload)).prContext.url }}) - `${{ fromJSON(fromJSON(inputs.client_payload)).branch }}` by ${{ fromJSON(fromJSON(inputs.client_payload)).prContext.author }} (`${{ fromJSON(fromJSON(inputs.client_payload)).webhookEventName }}`)' >> $GITHUB_STEP_SUMMARY
 
       - name: Evaluate Rules
         uses: linear-b/gitstream-github-action@v2
