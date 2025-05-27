@@ -2,5 +2,5 @@
 
 A new repository was created for exploring and experimenting with the GitStream workflow.
 
-https://app.gitstream.cm/playground
+https://app.gitstream.cm/playground1
 
