@@ -3,9 +3,10 @@ manifest:
   version: 1.0
 
 automations:
-  approve_tests:
+  approve_only:
     if:
-      - {{ pr.title | includes(term="approve") }}
+      - true
+      # - {{ pr.title | includes(term="approve") }}
     run:
       - action: approve@v1
       - action: add-comment@v1
