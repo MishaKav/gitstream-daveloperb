@@ -26,4 +26,4 @@ echo "new tag: $new_tag"
 git tag $new_tag
 git push origin $new_tag
 
-echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+echo "new_tag1=$new_tag" >> $GITHUB_OUTPUT
