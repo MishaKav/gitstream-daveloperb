@@ -5,7 +5,7 @@ manifest:
 
 config:
   ignore_files:
-    - '**/*.js'
+    - '**/*.sh'
     - 'basic-api.js'
 
 automations:
