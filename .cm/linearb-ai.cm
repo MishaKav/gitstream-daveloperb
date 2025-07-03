@@ -6,6 +6,7 @@ manifest:
 config:
   ignore_files:
     - '**/*.js'
+    - 'basic-api.js'
 
 automations:
   linearb_ai_review:
